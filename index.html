@@ -3,527 +3,432 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>howellxuKing · 项目主页</title>
+  <title>XWarp · 多用户代理管理面板</title>
+  <meta name="description" content="XWarp —— 一键安装的多用户代理管理面板，支持节点管理、订阅系统、流量统计，黑白双主题。" />
+  <meta property="og:title" content="XWarp · 多用户代理管理面板" />
+  <meta property="og:description" content="一键安装 · 订阅即用 · 自带黑白双主题" />
   <style>
     :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --border: #30363d;
-      --text: #e6edf3;
-      --muted: #8b949e;
-      --accent: #58a6ff;
-      --accent2: #3fb950;
-      --accent3: #d2a8ff;
-      --accent4: #ffa657;
-      --tag-bg: #21262d;
-      --card-hover: #1f2937;
+      --bg: #0a0e17;
+      --surface: #111827;
+      --surface2: #1a2236;
+      --border: #1e2d45;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59,130,246,0.25);
+      --accent2: #06b6d4;
+      --green: #10b981;
+      --purple: #8b5cf6;
+      --orange: #f59e0b;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
+    html { scroll-behavior: smooth; }
     body {
       background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      min-height: 100vh;
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
-    /* ── HERO ─────────────────────────────── */
-    .hero {
-      background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+    /* ── NAV ────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 60px;
+      background: rgba(10,14,23,0.85);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      padding: 72px 24px 60px;
+    }
+    .nav-logo {
+      font-size: 1.2rem; font-weight: 800; letter-spacing: -0.5px;
+      color: var(--text); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent); color: #fff;
+      padding: 7px 18px; border-radius: 8px;
+      font-size: 0.85rem; font-weight: 600;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .nav-cta:hover { background: #2563eb; }
+
+    /* ── HERO ───────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
       text-align: center;
+      padding: 100px 24px 60px;
       position: relative;
       overflow: hidden;
     }
     .hero::before {
       content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(88,166,255,0.12) 0%, transparent 70%);
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(59,130,246,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 30% at 80% 80%, rgba(6,182,212,0.08) 0%, transparent 50%);
       pointer-events: none;
     }
-    .avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 3px solid var(--border);
-      margin-bottom: 20px;
-      box-shadow: 0 0 0 4px rgba(88,166,255,0.15);
-    }
-    .hero h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 8px;
-    }
-    .hero h1 span { color: var(--accent); }
-    .hero .subtitle {
-      color: var(--muted);
-      font-size: 1rem;
-      margin-bottom: 28px;
-      max-width: 480px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .hero-stats {
-      display: inline-flex;
-      gap: 32px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 32px;
-      margin-bottom: 28px;
-    }
-    .stat { text-align: center; }
-    .stat-num { font-size: 1.4rem; font-weight: 700; color: var(--accent); }
-    .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-    .hero-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.2s;
-      cursor: pointer;
-      border: none;
-    }
-    .btn-primary { background: var(--accent); color: #0d1117; }
-    .btn-primary:hover { background: #79c0ff; }
-    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-    .btn-outline:hover { background: var(--surface); border-color: var(--accent); color: var(--accent); }
-
-    /* ── MAIN LAYOUT ───────────────────────── */
-    .main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
-
-    .section-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .section-title::after {
+    /* animated grid */
+    .hero::after {
       content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.25;
+      pointer-events: none;
     }
-
-    /* ── FEATURED PROJECTS ────────────────── */
-    .featured-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 20px;
-      margin-bottom: 56px;
-    }
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-      display: flex;
-      flex-direction: column;
-    }
-    .card:hover {
-      transform: translateY(-3px);
-      border-color: var(--accent);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    }
-    .card-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-    .card-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
-    .card-title { font-size: 1rem; font-weight: 600; }
-    .card-title a { color: var(--accent); text-decoration: none; }
-    .card-title a:hover { text-decoration: underline; }
-    .badge-fork {
-      font-size: 0.65rem;
-      background: var(--tag-bg);
-      color: var(--muted);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 1px 6px;
-      vertical-align: middle;
-      margin-left: 6px;
-    }
-    .card-desc {
-      color: var(--muted);
-      font-size: 0.88rem;
-      flex: 1;
-      margin-bottom: 16px;
-    }
-    .card-footer {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .lang-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      display: inline-block;
-      flex-shrink: 0;
-    }
-    .lang-label { font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 5px; }
-    .tag {
-      background: var(--tag-bg);
-      border: 1px solid var(--border);
+    .hero-content { position: relative; z-index: 1; max-width: 760px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.3);
       border-radius: 20px;
-      padding: 2px 10px;
-      font-size: 0.75rem;
-      color: var(--muted);
+      padding: 5px 14px; font-size: 0.78rem;
+      color: #93c5fd; margin-bottom: 28px;
     }
-    .card-link {
-      margin-top: auto;
-      margin-left: auto;
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:#3b82f6; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800; line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
     }
-    .card-link a {
-      color: var(--accent);
-      font-size: 0.82rem;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+    .hero h1 .brand { color: var(--accent); }
+    .hero h1 .sub { display: block; font-size: clamp(1rem, 2.5vw, 1.4rem); font-weight: 400; color: var(--muted); letter-spacing: 0; margin-top: 10px; }
+    .hero-desc {
+      font-size: 1.05rem; color: var(--muted);
+      max-width: 520px; margin: 0 auto 36px;
     }
-    .card-link a:hover { text-decoration: underline; }
-
-    /* lang colors */
-    .lang-go { background: #00add8; }
-    .lang-vue { background: #42b883; }
-    .lang-shell { background: #89e051; }
-    .lang-ts { background: #3178c6; }
-    .lang-js { background: #f1e05a; }
-    .lang-py { background: #3572a5; }
-    .lang-other { background: #8b949e; }
-
-    /* ── ALL REPOS TABLE ─────────────────── */
-    .repo-list { margin-bottom: 56px; }
-    .repo-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-      transition: background 0.15s;
+    .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 10px;
+      font-size: 0.92rem; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
     }
-    .repo-row:first-child { border-top: 1px solid var(--border); }
-    .repo-row:hover { background: rgba(255,255,255,0.02); padding-left: 8px; border-radius: 6px; }
-    .repo-name { font-weight: 600; }
-    .repo-name a { color: var(--accent); text-decoration: none; }
-    .repo-name a:hover { text-decoration: underline; }
-    .repo-desc { color: var(--muted); font-size: 0.85rem; flex: 1; }
-    .repo-meta { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-
-    /* ── TECH STACK ──────────────────────── */
-    .stack-grid {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 56px;
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      box-shadow: 0 0 24px var(--accent-glow);
     }
-    .stack-item {
-      background: var(--surface);
+    .btn-primary:hover { background: #2563eb; transform: translateY(-1px); box-shadow: 0 4px 32px var(--accent-glow); }
+    .btn-outline {
+      background: transparent; color: var(--text);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 18px;
-      font-size: 0.88rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--text);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(59,130,246,0.05); }
+
+    /* code snippet */
+    .install-box {
+      margin-top: 48px;
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 20px;
+      font-family: "Cascadia Code", "Fira Code", "Courier New", monospace;
+      font-size: 0.85rem; color: var(--green);
+      cursor: pointer; position: relative;
+    }
+    .install-box .prompt { color: var(--muted); }
+    .install-box .copy-hint {
+      font-size: 0.72rem; color: var(--muted);
+      font-family: system-ui; margin-left: 8px;
     }
 
-    /* ── FOOTER ──────────────────────────── */
+    /* ── SECTION COMMON ─────────────────── */
+    section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      text-transform: uppercase; letter-spacing: 0.1em;
+      font-size: 0.75rem; color: var(--accent); font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700; letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+    .section-desc { color: var(--muted); max-width: 560px; margin-bottom: 48px; font-size: 0.98rem; }
+
+    /* ── FEATURES ───────────────────────── */
+    #features { border-top: 1px solid var(--border); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 16px;
+    }
+    .feature-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+    .feature-card p { color: var(--muted); font-size: 0.88rem; }
+
+    /* ── ARCH ───────────────────────────── */
+    #arch { border-top: 1px solid var(--border); }
+    .arch-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .arch-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px;
+      text-align: center;
+    }
+    .arch-card .arch-emoji { font-size: 2rem; margin-bottom: 12px; }
+    .arch-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .arch-card .arch-lang {
+      display: inline-block;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 2px 10px;
+      font-size: 0.78rem; color: var(--muted); margin-bottom: 10px;
+    }
+    .arch-card p { color: var(--muted); font-size: 0.82rem; }
+    .arch-arrow {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; color: var(--border);
+    }
+
+    /* ── STACK ──────────────────────────── */
+    #stack { border-top: 1px solid var(--border); }
+    .stack-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 16px;
+      font-size: 0.85rem;
+    }
+    .chip-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ── ABOUT ──────────────────────────── */
+    #about {
+      border-top: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      align-items: flex-start;
+    }
+    .about-inner {
+      display: flex; gap: 48px; align-items: center; flex-wrap: wrap;
+    }
+    .about-avatar {
+      width: 96px; height: 96px; border-radius: 50%;
+      border: 3px solid var(--border);
+      box-shadow: 0 0 0 6px rgba(59,130,246,0.1);
+      flex-shrink: 0;
+    }
+    .about-bio h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 6px; }
+    .about-bio p { color: var(--muted); font-size: 0.92rem; max-width: 480px; }
+    .about-links { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    .about-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--muted); text-decoration: none; font-size: 0.85rem;
+      padding: 6px 14px; border: 1px solid var(--border);
+      border-radius: 8px; transition: all 0.2s;
+    }
+    .about-link:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* ── FOOTER ─────────────────────────── */
     footer {
       border-top: 1px solid var(--border);
-      padding: 32px 24px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.82rem;
+      padding: 32px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+      color: var(--muted); font-size: 0.82rem;
     }
     footer a { color: var(--accent); text-decoration: none; }
 
-    @media (max-width: 600px) {
-      .hero h1 { font-size: 1.6rem; }
-      .hero-stats { gap: 20px; padding: 14px 20px; }
-      .featured-grid { grid-template-columns: 1fr; }
-      .repo-desc { display: none; }
+    /* ── RESPONSIVE ─────────────────────── */
+    @media (max-width: 700px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .arch-grid { grid-template-columns: 1fr; }
+      .arch-arrow { transform: rotate(90deg); }
+      footer { justify-content: center; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══ HERO ══════════════════════════════════════ -->
-<div class="hero">
-  <img
-    class="avatar"
-    src="https://avatars.githubusercontent.com/u/133670669?v=4"
-    alt="howellxuKing"
-  />
-  <h1>howell<span>xuKing</span></h1>
-  <p class="subtitle">全栈开发者 · 专注于 Go 后端、Vue 前端与网络工具开发</p>
-
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-num">14</div>
-      <div class="stat-label">公开仓库</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">3</div>
-      <div class="stat-label">原创项目</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">2023</div>
-      <div class="stat-label">加入 GitHub</div>
-    </div>
+<!-- ══ NAV ═══════════════════════════════════════ -->
+<nav>
+  <a class="nav-logo" href="#">⬡ <span>X</span>Warp</a>
+  <div class="nav-links">
+    <a href="#features">功能</a>
+    <a href="#arch">架构</a>
+    <a href="#stack">技术栈</a>
+    <a href="#about">关于作者</a>
   </div>
+  <a class="nav-cta" href="https://github.com/howellxuKing/xwarp" target="_blank">GitHub →</a>
+</nav>
 
-  <div class="hero-links">
-    <a class="btn btn-primary" href="https://github.com/howellxuKing" target="_blank">
-      <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-      GitHub 主页
-    </a>
-    <a class="btn btn-outline" href="mailto:x50210009@gmail.com">
-      ✉ 联系我
-    </a>
+<!-- ══ HERO ═══════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span> 开源项目 · 持续迭代中
+    </div>
+    <h1>
+      <span class="brand">XWarp</span>
+      <span class="sub">多用户代理管理面板</span>
+    </h1>
+    <p class="hero-desc">
+      一键安装 · 订阅即用 · 自带黑白双主题<br/>
+      Go 后端 + Vue 前端，节点/用户/流量/订阅全覆盖
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://github.com/howellxuKing/xwarp-install" target="_blank">
+        🚀 一键安装
+      </a>
+      <a class="btn btn-outline" href="https://github.com/howellxuKing/xwarp" target="_blank">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        查看源码
+      </a>
+    </div>
+    <div class="install-box" onclick="navigator.clipboard.writeText('source <(curl -L https://raw.githubusercontent.com/howellxuKing/xwarp-install/main/install.sh)')">
+      <span class="prompt">$</span>
+      <span>source &lt;(curl -L .../xwarp-install/main/install.sh)</span>
+      <span class="copy-hint">点击复制</span>
+    </div>
   </div>
 </div>
 
-<!-- ══ MAIN ═══════════════════════════════════════ -->
-<main class="main">
-
-  <!-- Featured Projects -->
-  <div class="section-title">⭐ 原创项目</div>
-  <div class="featured-grid">
-
-    <!-- xwarp -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon" style="background:rgba(0,173,216,0.15)">🌐</div>
-        <div>
-          <div class="card-title">
-            <a href="https://github.com/howellxuKing/xwarp" target="_blank">xwarp</a>
-          </div>
-        </div>
-      </div>
-      <div class="card-desc">XWarp 后端服务 —— 基于 Go 构建的高性能 API 与订阅服务，支持灵活的代理节点管理与用户订阅系统。</div>
-      <div class="card-footer">
-        <span class="lang-label"><span class="lang-dot lang-go"></span>Go</span>
-        <span class="tag">API</span>
-        <span class="tag">后端</span>
-        <span class="tag">订阅</span>
-        <div class="card-link">
-          <a href="https://github.com/howellxuKing/xwarp" target="_blank">查看仓库 →</a>
-        </div>
-      </div>
+<!-- ══ FEATURES ════════════════════════════════════ -->
+<section id="features">
+  <div class="section-label">核心功能</div>
+  <div class="section-title">一个面板，全部搞定</div>
+  <p class="section-desc">XWarp 把代理服务的常见管理需求整合到一个轻量面板中，开箱即用。</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(59,130,246,0.12)">🌐</div>
+      <h3>节点管理</h3>
+      <p>多协议节点统一管理，支持增删改查与状态监控，配置一目了然。</p>
     </div>
-
-    <!-- xwarp-ui -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon" style="background:rgba(66,184,131,0.15)">🎨</div>
-        <div>
-          <div class="card-title">
-            <a href="https://github.com/howellxuKing/xwarp-ui" target="_blank">xwarp-ui</a>
-          </div>
-        </div>
-      </div>
-      <div class="card-desc">XWarp 前端管理界面 —— 基于 Vue + Element UI 构建，支持黑白双主题切换，提供直观的节点管理与用户操作体验。</div>
-      <div class="card-footer">
-        <span class="lang-label"><span class="lang-dot lang-vue"></span>Vue</span>
-        <span class="tag">前端</span>
-        <span class="tag">Element UI</span>
-        <span class="tag">双主题</span>
-        <div class="card-link">
-          <a href="https://github.com/howellxuKing/xwarp-ui" target="_blank">查看仓库 →</a>
-        </div>
-      </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(16,185,129,0.12)">👥</div>
+      <h3>用户 & 账号管理</h3>
+      <p>多用户体系，独立流量配额、到期时间与权限控制，支持批量操作。</p>
     </div>
-
-    <!-- ChatGPT-Web1 -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon" style="background:rgba(210,168,255,0.15)">🤖</div>
-        <div>
-          <div class="card-title">
-            <a href="https://github.com/howellxuKing/ChatGPT-Web1" target="_blank">ChatGPT-Web1</a>
-          </div>
-        </div>
-      </div>
-      <div class="card-desc">自建 ChatGPT Web 客户端 —— 定制化的 AI 对话前端界面，提供流畅的聊天交互体验。</div>
-      <div class="card-footer">
-        <span class="lang-label"><span class="lang-dot lang-js"></span>JavaScript</span>
-        <span class="tag">AI</span>
-        <span class="tag">ChatGPT</span>
-        <div class="card-link">
-          <a href="https://github.com/howellxuKing/ChatGPT-Web1" target="_blank">查看仓库 →</a>
-        </div>
-      </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(139,92,246,0.12)">📊</div>
+      <h3>流量统计</h3>
+      <p>实时流量用量追踪，到期预警，邮件提醒，让运营数据清晰可见。</p>
     </div>
-
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(245,158,11,0.12)">📋</div>
+      <h3>订阅系统</h3>
+      <p>内置订阅链接生成与下发，客户端一键导入，省去手动配置的麻烦。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(6,182,212,0.12)">🎨</div>
+      <h3>黑白双主题</h3>
+      <p>内置深色 / 浅色双套主题，根据使用场景一键切换，护眼又美观。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(239,68,68,0.12)">⚡</div>
+      <h3>一键安装</h3>
+      <p>Shell 脚本自动完成全套环境部署，单行命令即可启动完整服务。</p>
+    </div>
   </div>
+</section>
 
-  <!-- All Repos -->
-  <div class="section-title">📁 所有仓库</div>
-  <div class="repo-list">
-
-    <div class="repo-row">
-      <div style="flex:1">
-        <div class="repo-name"><a href="https://github.com/howellxuKing/xwarp" target="_blank">xwarp</a></div>
-        <div class="repo-desc">XWarp 后端（Go API + 订阅服务）</div>
-      </div>
-      <div class="repo-meta">
-        <span class="lang-label"><span class="lang-dot lang-go"></span>Go</span>
-      </div>
+<!-- ══ ARCHITECTURE ═════════════════════════════════ -->
+<section id="arch">
+  <div class="section-label">项目架构</div>
+  <div class="section-title">三仓库协同，职责清晰</div>
+  <p class="section-desc">后端、前端、安装脚本分仓管理，独立迭代，互相配合。</p>
+  <div class="arch-grid">
+    <div class="arch-card">
+      <div class="arch-emoji">🔧</div>
+      <h3>xwarp</h3>
+      <span class="arch-lang">Go</span>
+      <p>API 服务 + 订阅下发<br/>分层架构：api / service / dao / model / core</p>
+      <br/>
+      <a href="https://github.com/howellxuKing/xwarp" target="_blank" style="color:var(--accent);font-size:0.82rem;text-decoration:none">查看仓库 →</a>
     </div>
-
-    <div class="repo-row">
-      <div style="flex:1">
-        <div class="repo-name"><a href="https://github.com/howellxuKing/xwarp-ui" target="_blank">xwarp-ui</a></div>
-        <div class="repo-desc">XWarp 前端管理界面（Vue + Element UI，黑白双主题）</div>
-      </div>
-      <div class="repo-meta">
-        <span class="lang-label"><span class="lang-dot lang-vue"></span>Vue</span>
-      </div>
+    <div class="arch-arrow">⟷</div>
+    <div class="arch-card">
+      <div class="arch-emoji">🎨</div>
+      <h3>xwarp-ui</h3>
+      <span class="arch-lang">Vue + Element UI</span>
+      <p>Web 管理界面<br/>节点 / 用户 / 流量 / 订阅 / 系统设置</p>
+      <br/>
+      <a href="https://github.com/howellxuKing/xwarp-ui" target="_blank" style="color:var(--accent);font-size:0.82rem;text-decoration:none">查看仓库 →</a>
     </div>
-
-    <div class="repo-row">
-      <div style="flex:1">
-        <div class="repo-name">
-          <a href="https://github.com/howellxuKing/xwarp-install" target="_blank">xwarp-install</a>
-          <span class="badge-fork">fork</span>
-        </div>
-        <div class="repo-desc">XWarp 一键安装脚本</div>
-      </div>
-      <div class="repo-meta">
-        <span class="lang-label"><span class="lang-dot lang-shell"></span>Shell</span>
-      </div>
+    <div class="arch-arrow">⟷</div>
+    <div class="arch-card">
+      <div class="arch-emoji">📦</div>
+      <h3>xwarp-install</h3>
+      <span class="arch-lang">Shell</span>
+      <p>一键安装脚本<br/>自动拉取镜像、配置环境、启动服务</p>
+      <br/>
+      <a href="https://github.com/howellxuKing/xwarp-install" target="_blank" style="color:var(--accent);font-size:0.82rem;text-decoration:none">查看仓库 →</a>
     </div>
-
-    <div class="repo-row">
-      <div style="flex:1">
-        <div class="repo-name">
-          <a href="https://github.com/howellxuKing/LunaTV" target="_blank">LunaTV</a>
-          <span class="badge-fork">fork</span>
-        </div>
-        <div class="repo-desc">CC BY-NC-SA 协议开源的流媒体项目</div>
-      </div>
-      <div class="repo-meta">
-        <span class="lang-label"><span class="lang-dot lang-other"></span>—</span>
-      </div>
-    </div>
-
-    <div class="repo-row">
-      <div style="flex:1">
-        <div class="repo-name">
-          <a href="https://github.com/howellxuKing/MoonTV" target="_blank">MoonTV</a>
-          <span class="badge-fork">fork</span>
-        </div>
-        <div class="repo-desc">流媒体播放平台（Vercel 部署）</div>
-      </div>
-      <div class="repo-meta">
-        <span class="lang-label"><span class="lang-dot lang-other"></span>—</span>
-      </div>
-    </div>
-
-    <div class="repo-row">
-      <div style="flex:1">
-        <div class="repo-name">
-          <a href="https://github.com/howellxuKing/ChatGPT-Next-Web" target="_blank">ChatGPT-Next-Web</a>
-          <span class="badge-fork">fork</span>
-        </div>
-        <div class="repo-desc">一键部署精美 ChatGPT 网页服务</div>
-      </div>
-      <div class="repo-meta">
-        <span class="lang-label"><span class="lang-dot lang-ts"></span>TypeScript</span>
-      </div>
-    </div>
-
-    <div class="repo-row">
-      <div style="flex:1">
-        <div class="repo-name"><a href="https://github.com/howellxuKing/ChatGPT-Web1" target="_blank">ChatGPT-Web1</a></div>
-        <div class="repo-desc">自建 ChatGPT Web 前端界面</div>
-      </div>
-      <div class="repo-meta">
-        <span class="lang-label"><span class="lang-dot lang-js"></span>JavaScript</span>
-      </div>
-    </div>
-
-    <div class="repo-row">
-      <div style="flex:1">
-        <div class="repo-name">
-          <a href="https://github.com/howellxuKing/pandora" target="_blank">pandora</a>
-          <span class="badge-fork">fork</span>
-        </div>
-        <div class="repo-desc">潘多拉，一个让你呼吸顺畅的 ChatGPT</div>
-      </div>
-      <div class="repo-meta">
-        <span class="lang-label"><span class="lang-dot lang-other"></span>—</span>
-      </div>
-    </div>
-
-    <div class="repo-row">
-      <div style="flex:1">
-        <div class="repo-name">
-          <a href="https://github.com/howellxuKing/Pandora2" target="_blank">Pandora2</a>
-          <span class="badge-fork">fork</span>
-        </div>
-        <div class="repo-desc">潘多拉的魔盒了解一下</div>
-      </div>
-      <div class="repo-meta">
-        <span class="lang-label"><span class="lang-dot lang-other"></span>—</span>
-      </div>
-    </div>
-
   </div>
+</section>
 
-  <!-- Tech Stack -->
-  <div class="section-title">🛠 技术栈</div>
-  <div class="stack-grid">
-    <div class="stack-item"><span style="color:#00add8">●</span> Go</div>
-    <div class="stack-item"><span style="color:#42b883">●</span> Vue.js</div>
-    <div class="stack-item"><span style="color:#f1e05a">●</span> JavaScript</div>
-    <div class="stack-item"><span style="color:#3178c6">●</span> TypeScript</div>
-    <div class="stack-item"><span style="color:#89e051">●</span> Shell / Bash</div>
-    <div class="stack-item">🐳 Docker</div>
-    <div class="stack-item">▲ Vercel</div>
-    <div class="stack-item">🔗 REST API</div>
+<!-- ══ STACK ════════════════════════════════════════ -->
+<section id="stack">
+  <div class="section-label">技术栈</div>
+  <div class="section-title">现代技术，轻量可靠</div>
+  <p class="section-desc">精选成熟技术组合，保证性能与可维护性的平衡。</p>
+  <div class="stack-chips">
+    <div class="chip"><span class="chip-dot" style="background:#00add8"></span> Go</div>
+    <div class="chip"><span class="chip-dot" style="background:#42b883"></span> Vue.js</div>
+    <div class="chip"><span class="chip-dot" style="background:#409eff"></span> Element UI</div>
+    <div class="chip"><span class="chip-dot" style="background:#89e051"></span> Shell / Bash</div>
+    <div class="chip">🐳 Docker</div>
+    <div class="chip">🗄️ MySQL / SQLite</div>
+    <div class="chip">🔒 JWT 鉴权</div>
+    <div class="chip">📧 邮件提醒</div>
+    <div class="chip">📡 REST API</div>
   </div>
+</section>
 
-</main>
+<!-- ══ ABOUT ════════════════════════════════════════ -->
+<section id="about">
+  <div class="section-label">关于作者</div>
+  <div class="about-inner">
+    <img class="about-avatar" src="https://avatars.githubusercontent.com/u/133670669?v=4" alt="howellxuKing" />
+    <div class="about-bio">
+      <h2>howellxuKing</h2>
+      <p>全栈开发者，专注于 Go 后端与 Vue 前端。XWarp 是我的主力开源项目，欢迎 Star、提 Issue 或参与贡献。</p>
+      <div class="about-links">
+        <a class="about-link" href="https://github.com/howellxuKing" target="_blank">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+        <a class="about-link" href="mailto:x50210009@gmail.com">✉ 联系我</a>
+        <a class="about-link" href="https://github.com/howellxuKing/xwarp" target="_blank">⭐ Star XWarp</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-<!-- ══ FOOTER ═════════════════════════════════════ -->
+<!-- ══ FOOTER ═══════════════════════════════════════ -->
 <footer>
-  <p>
-    由 <a href="https://github.com/howellxuKing" target="_blank">howellxuKing</a> 构建 ·
-    数据来源自 <a href="https://api.github.com/users/howellxuKing" target="_blank">GitHub API</a> ·
-    最后更新：2026年9月
-  </p>
+  <div>© 2026 <a href="https://github.com/howellxuKing" target="_blank">howellxuKing</a> · XWarp · MIT License</div>
+  <div>
+    <a href="https://github.com/howellxuKing/xwarp" target="_blank">后端</a> ·
+    <a href="https://github.com/howellxuKing/xwarp-ui" target="_blank">前端</a> ·
+    <a href="https://github.com/howellxuKing/xwarp-install" target="_blank">安装脚本</a>
+  </div>
 </footer>
 
 </body>
