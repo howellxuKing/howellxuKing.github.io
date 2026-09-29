@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XWarp · 商业大气版</title>
+  <style>
+    :root {
+      --red: #dc2626;
+      --red2: #b91c1c;
+      --bg: #09090b;
+      --surface: #18181b;
+      --border: #27272a;
+      --text: #fafafa;
+      --muted: #71717a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; overflow-x: hidden; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 64px;
+      background: rgba(9,9,11,0.9); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo img:first-child { width: 34px; height: 34px; }
+    .nav-text-img { height: 22px; width: auto; object-fit: contain; }
+    .nav-logo span { font-size: 1.1rem; font-weight: 800; color: var(--text); }
+    .nav-logo span.xwarp-text { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+    .nav-logo span.xwarp-text em { color: var(--red); font-style: normal; }
+    .nav-logo span em { color: var(--red); font-style: normal; }
+    .hero-title-img { margin-bottom: 12px; }
+    .hero-title-img img { width: 100%; max-width: 420px; height: auto; }
+    .hero-logo-wrap { display: flex; align-items: center; justify-content: center; width: 100%; }
+    .hero-logo-wrap img { mix-blend-mode: screen; width: 420px; height: 420px; object-fit: contain; }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-btn { background: var(--red); color: #fff; padding: 8px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+    .nav-btn:hover { background: var(--red2); }
+
+    /* HERO - split layout */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 100px 48px 60px; gap: 60px;
+      max-width: 1200px; margin: 0 auto;
+      position: relative;
+    }
+    .hero-left { flex: 1; }
+    .hero-right { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; }
+
+    /* decorative blobs */
+    .blob1 { position: absolute; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(220,38,38,0.25) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); filter: blur(40px); }
+    .blob2 { position: absolute; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(220,38,38,0.15) 0%, transparent 70%); top: 10%; right: 0; filter: blur(30px); }
+
+    .hero-logo-wrap { position: relative; z-index: 1; }
+    .hero-logo-wrap img { width: 280px; height: 280px; filter: drop-shadow(0 0 40px rgba(220,38,38,0.5)); animation: rotate-glow 6s ease-in-out infinite alternate; }
+    @keyframes rotate-glow { 0%{filter:drop-shadow(0 0 30px rgba(220,38,38,0.4))} 100%{filter:drop-shadow(0 0 60px rgba(220,38,38,0.7))} }
+
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--red); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; }
+    .hero h1 { font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 900; letter-spacing: -2px; line-height: 1; margin-bottom: 12px; }
+    .hero h1.xwarp-hero { font-family: 'Rajdhani', sans-serif; font-size: clamp(3.5rem, 6vw, 5.5rem); letter-spacing: 0.05em; font-weight: 700; text-transform: uppercase; }
+    .hero h1 .brand-x { color: var(--red); }
+    .hero-gradient-line { height: 4px; width: 80px; background: linear-gradient(90deg, var(--red), transparent); border-radius: 2px; margin-bottom: 20px; }
+    .hero-desc { color: var(--muted); font-size: 1rem; line-height: 1.7; margin-bottom: 36px; max-width: 440px; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 48px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 10px; font-size: 0.92rem; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+    .btn-primary { background: var(--red); color: #fff; }
+    .btn-primary:hover { background: var(--red2); transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--red); color: var(--red); }
+    .hero-stats { display: flex; gap: 36px; }
+    .stat-num { font-size: 1.6rem; font-weight: 800; color: var(--red); }
+    .stat-label { font-size: 0.75rem; color: var(--muted); }
+
+    /* STRIP */
+    .strip { background: var(--red); padding: 16px 0; text-align: center; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.05em; overflow: hidden; }
+    .strip-inner { display: flex; gap: 60px; animation: marquee 20s linear infinite; white-space: nowrap; }
+    @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+    /* FEATURES */
+    #features { max-width: 1100px; margin: 0 auto; padding: 80px 48px; }
+    .sec-eyebrow { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red); font-weight: 700; margin-bottom: 8px; }
+    .sec-title { font-size: clamp(1.8rem,3vw,2.6rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
+    .sec-desc { color: var(--muted); margin-bottom: 48px; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 2px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .feat-item { background: var(--bg); padding: 32px; transition: background 0.2s; }
+    .feat-item:hover { background: var(--surface); }
+    .feat-num { font-size: 0.72rem; color: var(--red); font-weight: 700; font-family: monospace; margin-bottom: 12px; }
+    .feat-item h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+    .feat-item p { color: var(--muted); font-size: 0.86rem; line-height: 1.6; }
+
+    /* STORY */
+    #story { border-top: 1px solid var(--border); padding: 80px 48px; max-width: 1100px; margin: 0 auto; }
+    .story-inner { display: flex; gap: 60px; align-items: center; flex-wrap: wrap; }
+    .story-logo { width: 200px; height: 200px; flex-shrink: 0; }
+    .story-text .badge { display: inline-block; background: rgba(220,38,38,0.1); border: 1px solid rgba(220,38,38,0.3); color: var(--red); font-size: 0.72rem; padding: 3px 10px; border-radius: 20px; margin-bottom: 16px; }
+    .story-text h2 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 14px; }
+    .story-text p { color: var(--muted); line-height: 1.8; margin-bottom: 20px; }
+    .letter-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .lbadge { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; gap: 8px; }
+    .lbadge .l { font-size: 1.2rem; font-weight: 900; color: var(--red); }
+    .lbadge .m { font-size: 0.72rem; color: var(--muted); }
+
+    /* ABOUT */
+    #about { border-top: 1px solid var(--border); padding: 80px 48px; max-width: 1100px; margin: 0 auto; display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
+    .about-avatar { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--border); }
+    .about-text h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+    .about-text p { color: var(--muted); font-size: 0.88rem; }
+    .alinks { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .alink { color: var(--muted); text-decoration: none; font-size: 0.8rem; border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; transition: all 0.2s; }
+    .alink:hover { color: var(--red); border-color: var(--red); }
+
+    footer { border-top: 1px solid var(--border); padding: 24px 48px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 0.78rem; }
+    footer a { color: var(--text); text-decoration: none; }
+    footer a:hover { color: var(--red); }
+    @media(max-width:900px){ .hero{flex-direction:column;padding:100px 24px 60px;} .hero-right{order:-1;} .hero-logo-wrap img{width:180px;height:180px;} nav{padding:0 20px;} .nav-links{display:none;} #features,#story,#about{padding:60px 24px;} .story-inner{flex-direction:column;} footer{justify-content:center;text-align:center;} }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="#"><img src="logo-dark.png" alt="XWarp" style="mix-blend-mode:screen;" /><img src="xwarp-text.png" alt="XWarp" class="nav-text-img" /></a>
+  <div class="nav-links">
+    <a href="#features">功能</a><a href="#story">Logo 故事</a><a href="#about">关于</a>
+    <a href="https://github.com/howellxuKing/xwarp" target="_blank">GitHub</a>
+  </div>
+  <a class="nav-btn" href="https://github.com/howellxuKing/xwarp-install" target="_blank">立即安装</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">⬡ 开源代理管理</div>
+    <div class="hero-title-img"><img src="xwarp-text.png" alt="XWarp" /></div>
+    <div class="hero-gradient-line"></div>
+    <p class="hero-desc">多用户代理管理面板 —— 一键安装，订阅即用，Go 后端 + Vue 前端，节点、用户、流量、订阅全覆盖。</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://github.com/howellxuKing/xwarp-install" target="_blank">🚀 一键安装</a>
+      <a class="btn btn-outline" href="https://github.com/howellxuKing/xwarp" target="_blank">查看源码 →</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">3</div><div class="stat-label">核心仓库</div></div>
+      <div><div class="stat-num">Go+Vue</div><div class="stat-label">技术栈</div></div>
+      <div><div class="stat-num">MIT</div><div class="stat-label">开源协议</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="blob1"></div>
+    <div class="blob2"></div>
+    <div class="hero-logo-wrap">
+      <img src="logo-dark.png" alt="XWarp Logo" />
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="strip-inner">
+    <span>节点管理</span><span>·</span><span>多用户系统</span><span>·</span><span>订阅下发</span><span>·</span><span>流量统计</span><span>·</span><span>邮件提醒</span><span>·</span><span>黑白双主题</span><span>·</span><span>一键部署</span><span>·</span>
+    <span>节点管理</span><span>·</span><span>多用户系统</span><span>·</span><span>订阅下发</span><span>·</span><span>流量统计</span><span>·</span><span>邮件提醒</span><span>·</span><span>黑白双主题</span><span>·</span><span>一键部署</span><span>·</span>
+  </div>
+</div>
+
+<section id="features">
+  <div class="sec-eyebrow">核心功能</div>
+  <div class="sec-title">一个面板，全部搞定</div>
+  <p class="sec-desc">XWarp 把代理服务管理的日常需求整合进一个轻量面板，开箱即用。</p>
+  <div class="features-grid">
+    <div class="feat-item"><div class="feat-num">01</div><h3>节点管理</h3><p>多协议节点统一管理，增删改查与实时状态监控，配置清晰直观。</p></div>
+    <div class="feat-item"><div class="feat-num">02</div><h3>多用户体系</h3><p>独立流量配额、到期时间与权限控制，支持批量创建与管理操作。</p></div>
+    <div class="feat-item"><div class="feat-num">03</div><h3>订阅系统</h3><p>自动生成订阅链接，客户端一键导入，省去繁琐的手动配置流程。</p></div>
+    <div class="feat-item"><div class="feat-num">04</div><h3>流量统计</h3><p>实时用量追踪与到期预警，支持邮件自动提醒，运营数据一目了然。</p></div>
+    <div class="feat-item"><div class="feat-num">05</div><h3>黑白双主题</h3><p>内置深色与浅色双套主题，根据使用场景一键切换，护眼舒适。</p></div>
+    <div class="feat-item"><div class="feat-num">06</div><h3>一键部署</h3><p>Shell 脚本自动完成全套环境部署，单行命令启动完整服务。</p></div>
+  </div>
+</section>
+
+<section id="story">
+  <div class="story-inner">
+    <img class="story-logo" src="logo-dark.png" alt="XWarp Logo" />
+    <div class="story-text">
+      <span class="badge">Logo 的故事</span>
+      <h2>一个图标，藏着五个字母</h2>
+      <p>Logo 并不是简单的 X 形图案——它的五个方向分别藏着 XWARP 的每一个字母：中心是 X，上方是 W，下方是 A，左侧是 R，右侧是 P。</p>
+      <p>更特别的是，<strong>XW</strong> 也是作者本人名字的缩写。一个 Logo，承载了项目名称与创作者身份的双重意义。</p>
+      <div class="letter-row">
+        <div class="lbadge"><span class="l">X</span><span class="m">中心 · 名字缩写</span></div>
+        <div class="lbadge"><span class="l">W</span><span class="m">上方 · 名字缩写</span></div>
+        <div class="lbadge"><span class="l">A</span><span class="m">下方</span></div>
+        <div class="lbadge"><span class="l">R</span><span class="m">左侧</span></div>
+        <div class="lbadge"><span class="l">P</span><span class="m">右侧</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <img class="about-avatar" src="https://avatars.githubusercontent.com/u/133670669?v=4" alt="howellxuKing" />
+  <div class="about-text">
+    <h2>howellxuKing <span style="color:var(--muted);font-weight:400;font-size:0.85rem">· XW</span></h2>
+    <p>全栈开发者，专注 Go 后端与 Vue 前端开发。XWarp 是我的主力开源项目，欢迎 Star 与参与贡献。</p>
+    <div class="alinks">
+      <a class="alink" href="https://github.com/howellxuKing" target="_blank">GitHub</a>
+      <a class="alink" href="mailto:x50210009@gmail.com">邮件联系</a>
+      <a class="alink" href="https://github.com/howellxuKing/xwarp" target="_blank">⭐ Star XWarp</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 <a href="https://github.com/howellxuKing">howellxuKing</a> · XWarp · MIT License</span>
+  <span>
+    <a href="https://github.com/howellxuKing/xwarp">后端</a> ·
+    <a href="https://github.com/howellxuKing/xwarp-ui">前端</a> ·
+    <a href="https://github.com/howellxuKing/xwarp-install">安装脚本</a>
+  </span>
+</footer>
+</body>
+</html>
