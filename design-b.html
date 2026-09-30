@@ -38,7 +38,15 @@
     .hero-title-img { margin-bottom: 12px; }
     .hero-title-img img { width: 100%; max-width: 420px; height: auto; }
     .hero-logo-wrap { display: flex; align-items: center; justify-content: center; width: 100%; }
-    .hero-logo-wrap img { mix-blend-mode: screen; width: 420px; height: 420px; object-fit: contain; }
+    .hero-logo-wrap img {
+      width: 420px; height: 420px; object-fit: contain;
+      filter: drop-shadow(0 0 18px rgba(220,38,38,0.9)) drop-shadow(0 0 40px rgba(220,38,38,0.5));
+      animation: logo-glow 3s ease-in-out infinite alternate;
+    }
+    @keyframes logo-glow {
+      0%  { filter: drop-shadow(0 0 12px rgba(220,38,38,0.7)) drop-shadow(0 0 30px rgba(220,38,38,0.4)); }
+      100%{ filter: drop-shadow(0 0 28px rgba(220,38,38,1.0)) drop-shadow(0 0 60px rgba(220,38,38,0.7)); }
+    }
     .nav-links { display: flex; gap: 32px; }
     .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
     .nav-links a:hover { color: var(--text); }
@@ -153,7 +161,7 @@
     <div class="blob1"></div>
     <div class="blob2"></div>
     <div class="hero-logo-wrap">
-      <img src="logo-dark.png" alt="XWarp Logo" />
+      <img src="logo-transparent.png" alt="XWarp Logo" />
     </div>
   </div>
 </section>
