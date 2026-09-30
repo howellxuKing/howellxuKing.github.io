@@ -1,227 +1,440 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>XWarp · 商业大气版</title>
+  <title>XWarp · 全球 AI 极速专线客户端</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --red: #dc2626;
-      --red2: #b91c1c;
+      --red: #e11d48;
+      --red2: #be123c;
+      --red-glow: rgba(225,29,72,0.4);
+      --red-dim: rgba(225,29,72,0.1);
       --bg: #09090b;
-      --surface: #18181b;
+      --surface: #121215;
+      --surface-card: #18181b;
       --border: #27272a;
       --text: #fafafa;
-      --muted: #71717a;
+      --muted: #a1a1aa;
+      --green: #22c55e;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; overflow-x: hidden; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; overflow-x: hidden; }
 
     /* NAV */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 48px; height: 64px;
-      background: rgba(9,9,11,0.9); backdrop-filter: blur(12px);
+      padding: 0 48px; height: 68px;
+      background: rgba(9,9,11,0.85); backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
     }
-    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-    .nav-logo img:first-child { width: 34px; height: 34px; }
-    .nav-text-img { height: 22px; width: auto; object-fit: contain; }
-    .nav-logo span { font-size: 1.1rem; font-weight: 800; color: var(--text); }
-    .nav-logo span.xwarp-text { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
-    .nav-logo span.xwarp-text em { color: var(--red); font-style: normal; }
-    .nav-logo span em { color: var(--red); font-style: normal; }
-    .hero-title-img { margin-bottom: 12px; }
-    .hero-title-img img { width: 100%; max-width: 420px; height: auto; }
-    .hero-logo-wrap { display: flex; align-items: center; justify-content: center; width: 100%; }
-    .hero-logo-wrap img {
-      width: 720px; height: 720px; object-fit: contain;
-      filter: drop-shadow(0 0 18px rgba(220,38,38,0.9)) drop-shadow(0 0 40px rgba(220,38,38,0.5));
-      animation: logo-glow 3s ease-in-out infinite alternate;
-    }
-    @keyframes logo-glow {
-      0%  { filter: drop-shadow(0 0 12px rgba(220,38,38,0.7)) drop-shadow(0 0 30px rgba(220,38,38,0.4)); }
-      100%{ filter: drop-shadow(0 0 28px rgba(220,38,38,1.0)) drop-shadow(0 0 60px rgba(220,38,38,0.7)); }
-    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo img.logo-icon { width: 36px; height: 36px; filter: drop-shadow(0 0 10px var(--red)); }
+    .nav-logo img.logo-text { height: 24px; width: auto; object-fit: contain; }
     .nav-links { display: flex; gap: 32px; }
-    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
     .nav-links a:hover { color: var(--text); }
-    .nav-btn { background: var(--red); color: #fff; padding: 8px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: background 0.2s; }
-    .nav-btn:hover { background: var(--red2); }
+    .nav-btn {
+      background: var(--red); color: #fff; padding: 9px 22px; border-radius: 9px;
+      font-size: 0.88rem; font-weight: 600; text-decoration: none;
+      box-shadow: 0 0 20px var(--red-glow); transition: all 0.2s;
+    }
+    .nav-btn:hover { background: var(--red2); transform: translateY(-1px); box-shadow: 0 0 28px var(--red-glow); }
 
-    /* HERO - split layout */
+    /* HERO */
     .hero {
       min-height: 100vh; display: flex; align-items: center;
-      padding: 100px 48px 60px; gap: 60px;
-      max-width: 1200px; margin: 0 auto;
+      padding: 120px 48px 80px; gap: 60px;
+      max-width: 1240px; margin: 0 auto;
       position: relative;
     }
-    .hero-left { flex: 1; }
-    .hero-right { flex: 1.3; display: flex; align-items: center; justify-content: center; position: relative; overflow: visible; }
+    .hero-left { flex: 1.1; }
+    .hero-right { flex: 0.9; display: flex; align-items: center; justify-content: center; position: relative; }
 
-    /* decorative blobs */
-    .blob1 { position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(220,38,38,0.2) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); filter: blur(50px); }
-    .blob2 { position: absolute; width: 250px; height: 250px; border-radius: 50%; background: radial-gradient(circle, rgba(220,38,38,0.12) 0%, transparent 70%); top: 10%; right: 0; filter: blur(30px); }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--red-dim); border: 1px solid rgba(225,29,72,0.3);
+      border-radius: 20px; padding: 6px 16px; font-size: 0.8rem; color: #fda4af;
+      margin-bottom: 24px; font-weight: 600;
+    }
+    .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); box-shadow: 0 0 8px var(--red); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
 
-    .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--red); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; }
-    .hero h1 { font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 900; letter-spacing: -2px; line-height: 1; margin-bottom: 12px; }
-    .hero h1.xwarp-hero { font-family: 'Rajdhani', sans-serif; font-size: clamp(3.5rem, 6vw, 5.5rem); letter-spacing: 0.05em; font-weight: 700; text-transform: uppercase; }
-    .hero h1 .brand-x { color: var(--red); }
-    .hero-gradient-line { height: 4px; width: 80px; background: linear-gradient(90deg, var(--red), transparent); border-radius: 2px; margin-bottom: 20px; }
-    .hero-desc { color: var(--muted); font-size: 1rem; line-height: 1.7; margin-bottom: 36px; max-width: 440px; }
-    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 48px; }
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 10px; font-size: 0.92rem; font-weight: 600; text-decoration: none; transition: all 0.2s; }
-    .btn-primary { background: var(--red); color: #fff; }
-    .btn-primary:hover { background: var(--red2); transform: translateY(-1px); }
-    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-    .btn-outline:hover { border-color: var(--red); color: var(--red); }
-    .hero-stats { display: flex; gap: 36px; }
-    .stat-num { font-size: 1.6rem; font-weight: 800; color: var(--red); }
-    .stat-label { font-size: 0.75rem; color: var(--muted); }
+    .hero h1 {
+      font-size: clamp(2.4rem, 4.2vw, 3.8rem); font-weight: 900;
+      letter-spacing: -1.5px; line-height: 1.15; margin-bottom: 18px;
+    }
+    .hero h1 span.gradient-text {
+      background: linear-gradient(135deg, #fff 30%, #fda4af 60%, var(--red) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      color: var(--muted); font-size: 1.05rem; line-height: 1.7;
+      margin-bottom: 36px; max-width: 520px;
+    }
 
-    /* STRIP */
-    .strip { background: var(--red); padding: 16px 0; text-align: center; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.05em; overflow: hidden; }
-    .strip-inner { display: flex; gap: 60px; animation: marquee 20s linear infinite; white-space: nowrap; }
-    @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 40px; }
+    .btn-download {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--red); color: #fff; padding: 14px 30px;
+      border-radius: 12px; font-size: 1rem; font-weight: 700;
+      text-decoration: none; box-shadow: 0 4px 25px var(--red-glow);
+      transition: all 0.2s;
+    }
+    .btn-download:hover { background: var(--red2); transform: translateY(-2px); box-shadow: 0 6px 35px var(--red-glow); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface-card); color: var(--text); border: 1px solid var(--border);
+      padding: 14px 24px; border-radius: 12px; font-size: 0.95rem; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--red); color: var(--red); }
 
-    /* FEATURES */
-    #features { max-width: 1100px; margin: 0 auto; padding: 80px 48px; }
-    .sec-eyebrow { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red); font-weight: 700; margin-bottom: 8px; }
-    .sec-title { font-size: clamp(1.8rem,3vw,2.6rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
-    .sec-desc { color: var(--muted); margin-bottom: 48px; }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 2px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
-    .feat-item { background: var(--bg); padding: 32px; transition: background 0.2s; }
-    .feat-item:hover { background: var(--surface); }
-    .feat-num { font-size: 0.72rem; color: var(--red); font-weight: 700; font-family: monospace; margin-bottom: 12px; }
-    .feat-item h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
-    .feat-item p { color: var(--muted); font-size: 0.86rem; line-height: 1.6; }
+    .hero-features-bar {
+      display: flex; gap: 24px; flex-wrap: wrap;
+      padding-top: 24px; border-top: 1px solid var(--border);
+    }
+    .f-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--muted); font-weight: 500; }
+    .f-item span.icon { color: var(--red); font-size: 1rem; }
 
-    /* STORY */
-    #story { border-top: 1px solid var(--border); padding: 80px 48px; max-width: 1100px; margin: 0 auto; }
-    .story-inner { display: flex; gap: 60px; align-items: center; flex-wrap: wrap; }
-    .story-logo { width: 200px; height: 200px; flex-shrink: 0; }
-    .story-text .badge { display: inline-block; background: rgba(220,38,38,0.1); border: 1px solid rgba(220,38,38,0.3); color: var(--red); font-size: 0.72rem; padding: 3px 10px; border-radius: 20px; margin-bottom: 16px; }
-    .story-text h2 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 14px; }
-    .story-text p { color: var(--muted); line-height: 1.8; margin-bottom: 20px; }
-    .letter-row { display: flex; gap: 10px; flex-wrap: wrap; }
-    .lbadge { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; gap: 8px; }
-    .lbadge .l { font-size: 1.2rem; font-weight: 900; color: var(--red); }
-    .lbadge .m { font-size: 0.72rem; color: var(--muted); }
+    /* MOCKUP WINDOW IN HERO */
+    .mockup-wrap { position: relative; width: 100%; max-width: 440px; }
+    .mockup-bg-glow {
+      position: absolute; inset: -20px;
+      background: radial-gradient(circle, rgba(225,29,72,0.28) 0%, transparent 70%);
+      filter: blur(40px); z-index: 0; pointer-events: none;
+    }
+    .client-window {
+      position: relative; z-index: 1;
+      background: #0c0c0e; border: 1px solid #27272a;
+      border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), 0 0 35px rgba(225,29,72,0.15);
+      overflow: hidden;
+    }
+    .win-bar {
+      height: 38px; background: #141417; border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 16px;
+      font-size: 0.75rem; color: #71717a;
+    }
+    .win-body { padding: 32px 24px; text-align: center; }
+    .win-logo {
+      width: 76px; height: 76px; margin: 0 auto 12px;
+      filter: drop-shadow(0 0 18px var(--red));
+    }
+    .win-title { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--red); letter-spacing: 0.05em; }
+    .win-sub { font-size: 0.75rem; color: #71717a; margin-bottom: 24px; }
+    .win-card {
+      background: #18181b; border: 1px solid #27272a; border-radius: 16px; padding: 24px 20px;
+    }
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 20px;
+      background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3);
+      color: #4ade80; font-size: 0.75rem; font-weight: 600; margin-bottom: 16px;
+    }
+    .win-big-btn {
+      width: 100%; padding: 18px; border-radius: 14px;
+      background: #15803d; color: #fff; font-size: 1.05rem; font-weight: 800;
+      border: none; box-shadow: 0 0 20px rgba(34,197,94,0.3);
+      cursor: default; display: flex; flex-direction: column; align-items: center; gap: 2px;
+    }
+    .win-big-btn span.sub { font-size: 0.72rem; font-weight: 400; opacity: 0.8; }
+    .win-tags {
+      margin-top: 18px; background: rgba(0,0,0,0.5); border: 1px solid #27272a;
+      border-radius: 10px; padding: 12px; font-size: 0.72rem; color: #a1a1aa; line-height: 1.6;
+    }
+    .win-tags strong { color: var(--red); }
 
-    /* ABOUT */
-    #about { border-top: 1px solid var(--border); padding: 80px 48px; max-width: 1100px; margin: 0 auto; display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
-    .about-avatar { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--border); }
-    .about-text h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
-    .about-text p { color: var(--muted); font-size: 0.88rem; }
-    .alinks { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-    .alink { color: var(--muted); text-decoration: none; font-size: 0.8rem; border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; transition: all 0.2s; }
-    .alink:hover { color: var(--red); border-color: var(--red); }
+    /* SECTION 1: FEATURES */
+    section.sec { padding: 90px 48px; max-width: 1240px; margin: 0 auto; }
+    .sec-header { text-align: center; max-width: 640px; margin: 0 auto 56px; }
+    .sec-eyebrow { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red); margin-bottom: 10px; }
+    .sec-title { font-size: clamp(1.8rem, 3.2vw, 2.6rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 14px; }
+    .sec-desc { color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
 
-    footer { border-top: 1px solid var(--border); padding: 24px 48px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 0.78rem; }
-    footer a { color: var(--text); text-decoration: none; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 18px; padding: 32px; transition: all 0.3s;
+    }
+    .card:hover { border-color: rgba(225,29,72,0.4); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
+    .card-icon {
+      width: 48px; height: 48px; border-radius: 12px; background: var(--red-dim);
+      border: 1px solid rgba(225,29,72,0.25); display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 20px;
+    }
+    .card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; }
+    .card p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
+
+    /* SECTION 2: AI SHOWCASE */
+    .ai-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 40px; }
+    .ai-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 20px 16px; text-align: center; transition: all 0.2s; text-decoration: none; color: inherit;
+    }
+    .ai-card:hover { border-color: var(--red); transform: translateY(-2px); }
+    .ai-card .ai-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+    .ai-card .ai-type { font-size: 0.75rem; color: var(--muted); }
+
+    /* SECTION 3: STEPS */
+    .steps-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 48px; }
+    .step-box { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; position: relative; }
+    .step-num { font-family: 'Rajdhani', sans-serif; font-size: 2.8rem; font-weight: 800; color: var(--red); line-height: 1; margin-bottom: 16px; opacity: 0.9; }
+    .step-box h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .step-box p { color: var(--muted); font-size: 0.86rem; line-height: 1.6; }
+
+    /* DOWNLOAD CTA */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(225,29,72,0.15) 0%, rgba(18,18,21,0.9) 100%);
+      border: 1px solid rgba(225,29,72,0.3); border-radius: 24px;
+      padding: 60px 40px; text-align: center; max-width: 1000px; margin: 40px auto 90px;
+    }
+    .cta-banner h2 { font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 800; margin-bottom: 14px; letter-spacing: -0.5px; }
+    .cta-banner p { color: var(--muted); font-size: 1rem; margin-bottom: 32px; max-width: 540px; margin-left: auto; margin-right: auto; }
+
+    footer {
+      border-top: 1px solid var(--border); padding: 36px 48px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+      color: var(--muted); font-size: 0.85rem; max-width: 1240px; margin: 0 auto;
+    }
+    footer a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
     footer a:hover { color: var(--red); }
-    @media(max-width:900px){ .hero{flex-direction:column;padding:100px 24px 60px;} .hero-right{order:-1;} .hero-logo-wrap img{width:180px;height:180px;} nav{padding:0 20px;} .nav-links{display:none;} #features,#story,#about{padding:60px 24px;} .story-inner{flex-direction:column;} footer{justify-content:center;text-align:center;} }
+
+    @media (max-width: 960px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { flex-direction: column; padding: 110px 24px 60px; text-align: center; }
+      .hero-desc { margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
+      .hero-features-bar { justify-content: center; }
+      section.sec { padding: 60px 24px; }
+      footer { padding: 24px; justify-content: center; text-align: center; }
+    }
   </style>
 </head>
 <body>
+
+<!-- NAV -->
 <nav>
-  <a class="nav-logo" href="#"><img src="logo-dark.png" alt="XWarp" style="mix-blend-mode:screen;" /><img src="xwarp-text.png" alt="XWarp" class="nav-text-img" /></a>
+  <a class="nav-logo" href="#">
+    <img src="logo-transparent.png" class="logo-icon" alt="XWarp" />
+    <img src="xwarp-text.png" class="logo-text" alt="XWarp Text" />
+  </a>
   <div class="nav-links">
-    <a href="#features">功能</a><a href="#story">Logo 故事</a><a href="#about">关于</a>
-    <a href="https://github.com/howellxuKing/xwarp" target="_blank">GitHub</a>
+    <a href="#features">核心特性</a>
+    <a href="#supported-ai">支持工具</a>
+    <a href="#steps">三步上手</a>
+    <a href="https://aba.xwarp.cc" target="_blank" style="opacity: 0.3;">管理后台</a>
   </div>
-  <a class="nav-btn" href="https://github.com/howellxuKing/xwarp-install" target="_blank">立即安装</a>
+  <a class="nav-btn" href="https://github.com/howellxuKing/xwarp-quick-setup/releases/download/v1.0.0/XWarp-v1.0.0-windows-x64.zip">
+    🚀 下载客户端
+  </a>
 </nav>
 
-<section class="hero">
+<!-- HERO -->
+<div class="hero">
   <div class="hero-left">
-    <div class="hero-eyebrow">⬡ 开源代理管理</div>
-    <div class="hero-title-img"><img src="xwarp-text.png" alt="XWarp" /></div>
-    <div class="hero-gradient-line"></div>
-    <p class="hero-desc">多用户代理管理面板 —— 一键安装，订阅即用，Go 后端 + Vue 前端，节点、用户、流量、订阅全覆盖。</p>
+    <div class="hero-badge">
+      <span class="pulse-dot"></span> XWarp 官方极简客户端 v1.0 发布
+    </div>
+    <h1>
+      全球前沿 AI 专线<br />
+      <span class="gradient-text">一个开关 · 秒速畅联</span>
+    </h1>
+    <p class="hero-desc">
+      专为 ChatGPT、Claude、Perplexity 等国外主流 AI 打造的专属轻量加速工具。输入专属 KEY 即可激活，原生 Hysteria 2 混淆协议，全自动智能分流，国内网络（百度/B站/淘宝）完全直连，不耗专线网速。
+    </p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="https://github.com/howellxuKing/xwarp-install" target="_blank">🚀 一键安装</a>
-      <a class="btn btn-outline" href="https://github.com/howellxuKing/xwarp" target="_blank">查看源码 →</a>
+      <a class="btn-download" href="https://github.com/howellxuKing/xwarp-quick-setup/releases/download/v1.0.0/XWarp-v1.0.0-windows-x64.zip">
+        <span>🚀 立即下载 Windows 绿色版</span>
+      </a>
+      <a class="btn-secondary" href="#steps">
+        <span>使用指引 →</span>
+      </a>
     </div>
-    <div class="hero-stats">
-      <div><div class="stat-num">3</div><div class="stat-label">核心仓库</div></div>
-      <div><div class="stat-num">Go+Vue</div><div class="stat-label">技术栈</div></div>
-      <div><div class="stat-num">MIT</div><div class="stat-label">开源协议</div></div>
+    <div class="hero-features-bar">
+      <div class="f-item"><span class="icon">✓</span> 绿色免安装 (解压即用)</div>
+      <div class="f-item"><span class="icon">✓</span> 纯净单按钮启停</div>
+      <div class="f-item"><span class="icon">✓</span> 智能白名单分流</div>
+      <div class="f-item"><span class="icon">✓</span> Hysteria 2 强抗封</div>
     </div>
   </div>
+
   <div class="hero-right">
-    <div class="blob1"></div>
-    <div class="blob2"></div>
-    <div class="hero-logo-wrap">
-      <img src="logo-transparent.png" alt="XWarp Logo" />
-    </div>
-  </div>
-</section>
+    <div class="mockup-wrap">
+      <div class="mockup-bg-glow"></div>
+      <div class="client-window">
+        <div class="win-bar">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:#e11d48;display:inline-block;"></span>
+            <span>XWarp AI 专线客户端 v1.0</span>
+          </div>
+          <div>一 口 ✕</div>
+        </div>
+        <div class="win-body">
+          <img src="logo-transparent.png" class="win-logo" alt="XWarp" />
+          <div class="win-title">XWARP</div>
+          <div class="win-sub">全球 AI 极速专线 · 智能分流</div>
 
-<div class="strip">
-  <div class="strip-inner">
-    <span>节点管理</span><span>·</span><span>多用户系统</span><span>·</span><span>订阅下发</span><span>·</span><span>流量统计</span><span>·</span><span>邮件提醒</span><span>·</span><span>黑白双主题</span><span>·</span><span>一键部署</span><span>·</span>
-    <span>节点管理</span><span>·</span><span>多用户系统</span><span>·</span><span>订阅下发</span><span>·</span><span>流量统计</span><span>·</span><span>邮件提醒</span><span>·</span><span>黑白双主题</span><span>·</span><span>一键部署</span><span>·</span>
-  </div>
-</div>
-
-<section id="features">
-  <div class="sec-eyebrow">核心功能</div>
-  <div class="sec-title">一个面板，全部搞定</div>
-  <p class="sec-desc">XWarp 把代理服务管理的日常需求整合进一个轻量面板，开箱即用。</p>
-  <div class="features-grid">
-    <div class="feat-item"><div class="feat-num">01</div><h3>节点管理</h3><p>多协议节点统一管理，增删改查与实时状态监控，配置清晰直观。</p></div>
-    <div class="feat-item"><div class="feat-num">02</div><h3>多用户体系</h3><p>独立流量配额、到期时间与权限控制，支持批量创建与管理操作。</p></div>
-    <div class="feat-item"><div class="feat-num">03</div><h3>订阅系统</h3><p>自动生成订阅链接，客户端一键导入，省去繁琐的手动配置流程。</p></div>
-    <div class="feat-item"><div class="feat-num">04</div><h3>流量统计</h3><p>实时用量追踪与到期预警，支持邮件自动提醒，运营数据一目了然。</p></div>
-    <div class="feat-item"><div class="feat-num">05</div><h3>黑白双主题</h3><p>内置深色与浅色双套主题，根据使用场景一键切换，护眼舒适。</p></div>
-    <div class="feat-item"><div class="feat-num">06</div><h3>一键部署</h3><p>Shell 脚本自动完成全套环境部署，单行命令启动完整服务。</p></div>
-  </div>
-</section>
-
-<section id="story">
-  <div class="story-inner">
-    <img class="story-logo" src="logo-dark.png" alt="XWarp Logo" />
-    <div class="story-text">
-      <span class="badge">Logo 的故事</span>
-      <h2>一个图标，藏着五个字母</h2>
-      <p>Logo 并不是简单的 X 形图案——它的五个方向分别藏着 XWARP 的每一个字母：中心是 X，上方是 W，下方是 A，左侧是 R，右侧是 P。</p>
-      <p>更特别的是，<strong>XW</strong> 也是作者本人名字的缩写。一个 Logo，承载了项目名称与创作者身份的双重意义。</p>
-      <div class="letter-row">
-        <div class="lbadge"><span class="l">X</span><span class="m">中心 · 名字缩写</span></div>
-        <div class="lbadge"><span class="l">W</span><span class="m">上方 · 名字缩写</span></div>
-        <div class="lbadge"><span class="l">A</span><span class="m">下方</span></div>
-        <div class="lbadge"><span class="l">R</span><span class="m">左侧</span></div>
-        <div class="lbadge"><span class="l">P</span><span class="m">右侧</span></div>
+          <div class="win-card">
+            <div class="status-pill">● 已连接 (AI 专线高速运行中)</div>
+            <button class="win-big-btn">
+              <span>✓ 专线已开启</span>
+              <span class="sub">点击一键断开复原</span>
+            </button>
+            <div class="win-tags">
+              <strong>[ 已加速的国外 AI 工具 ]</strong><br />
+              ChatGPT · Claude · Perplexity · Midjourney · Suno<br />
+              <span style="color:#52525b;font-size:0.68rem;">(国内网站自动直连，不耗专线网速)</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<section id="about">
-  <img class="about-avatar" src="https://avatars.githubusercontent.com/u/133670669?v=4" alt="howellxuKing" />
-  <div class="about-text">
-    <h2>howellxuKing <span style="color:var(--muted);font-weight:400;font-size:0.85rem">· XW</span></h2>
-    <p>全栈开发者，专注 Go 后端与 Vue 前端开发。XWarp 是我的主力开源项目，欢迎 Star 与参与贡献。</p>
-    <div class="alinks">
-      <a class="alink" href="https://github.com/howellxuKing" target="_blank">GitHub</a>
-      <a class="alink" href="mailto:x50210009@gmail.com">邮件联系</a>
-      <a class="alink" href="https://github.com/howellxuKing/xwarp" target="_blank">⭐ Star XWarp</a>
+<!-- SECTION 1: FEATURES -->
+<section class="sec" id="features">
+  <div class="sec-header">
+    <div class="sec-eyebrow">FEATURES</div>
+    <div class="sec-title">专为 AI 用户打磨的极致体验</div>
+    <p class="sec-desc">告别复杂的节点、订阅与规则配置。XWarp 将一切复杂性封装在底层，给您最纯净的连接体验。</p>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-icon">🔑</div>
+      <h3>极简 KEY 激活</h3>
+      <p>无需导入长串复杂的订阅链接，只需粘贴专属激活码 KEY，一秒完成节点握手与配置同步。</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <h3>单按钮极简操作</h3>
+      <p>软件界面摒弃一切冗余选项，只有一个醒目开关按钮。点击开启即可秒开 AI，点击关闭即复原。</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🛡️</div>
+      <h3>智能白名单分流</h3>
+      <p>严格限定仅代理国外主流 AI 服务。百度、B站、淘宝等国内所有流量均走本地直连，完全不降速。</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🚀</div>
+      <h3>Hysteria 2 原生协议</h3>
+      <p>基于先进的 QUIC + Salamander 随机乱码强混淆，在恶劣网络与晚高峰下依然拥有极低延迟与极强抗封锁力。</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📦</div>
+      <h3>纯净绿色免安装</h3>
+      <p>下载解压即可运行，无注册表残留，无需管理员向导，换电脑直接拷贝即可直接使用。</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔒</div>
+      <h3>TLS 1.3 端到端强加密</h3>
+      <p>全程采用国际最高标准传输加密，任何中间运营商与第三方均无法截获或侦测您的对话数据。</p>
     </div>
   </div>
 </section>
 
+<!-- SECTION 2: SUPPORTED AI -->
+<section class="sec" id="supported-ai" style="padding-top: 20px;">
+  <div class="sec-header">
+    <div class="sec-eyebrow">SUPPORTED SERVICES</div>
+    <div class="sec-title">支持全球主流前沿 AI 全家桶</div>
+    <p class="sec-desc">内置经过严格测试的域名路由规则，开箱即用，无需额外手动添加规则。</p>
+  </div>
+  <div class="ai-grid">
+    <div class="ai-card">
+      <div style="font-size:1.6rem;margin-bottom:8px;">🤖</div>
+      <div class="ai-name">ChatGPT</div>
+      <div class="ai-type">OpenAI 旗下旗舰对话</div>
+    </div>
+    <div class="ai-card">
+      <div style="font-size:1.6rem;margin-bottom:8px;">🧠</div>
+      <div class="ai-name">Claude</div>
+      <div class="ai-type">Anthropic 顶级编码模型</div>
+    </div>
+    <div class="ai-card">
+      <div style="font-size:1.6rem;margin-bottom:8px;">🔍</div>
+      <div class="ai-name">Perplexity</div>
+      <div class="ai-type">AI 实时智能搜索引擎</div>
+    </div>
+    <div class="ai-card">
+      <div style="font-size:1.6rem;margin-bottom:8px;">🎨</div>
+      <div class="ai-name">Midjourney</div>
+      <div class="ai-type">全球顶级 AI 绘画创作</div>
+    </div>
+    <div class="ai-card">
+      <div style="font-size:1.6rem;margin-bottom:8px;">🎵</div>
+      <div class="ai-name">Suno</div>
+      <div class="ai-type">全自动 AI 作词编曲音乐</div>
+    </div>
+    <div class="ai-card">
+      <div style="font-size:1.6rem;margin-bottom:8px;">⚡</div>
+      <div class="ai-name">Cursor</div>
+      <div class="ai-type">新一代智能 AI 代码编辑器</div>
+    </div>
+    <div class="ai-card">
+      <div style="font-size:1.6rem;margin-bottom:8px;">🌌</div>
+      <div class="ai-name">Grok</div>
+      <div class="ai-type">xAI 马斯克旗下对话模型</div>
+    </div>
+    <div class="ai-card">
+      <div style="font-size:1.6rem;margin-bottom:8px;">🤗</div>
+      <div class="ai-name">HuggingFace</div>
+      <div class="ai-type">开源 AI 模型与社区基座</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: STEPS -->
+<section class="sec" id="steps">
+  <div class="sec-header">
+    <div class="sec-eyebrow">QUICK START</div>
+    <div class="sec-title">简单三步，开启 AI 新世界</div>
+    <p class="sec-desc">零基础新手也能在 1 分钟内完成上手。</p>
+  </div>
+  <div class="steps-row">
+    <div class="step-box">
+      <div class="step-num">01</div>
+      <h4>下载解压客户端</h4>
+      <p>点击本站下载按钮获取 Windows 绿色便携包，解压到任意文件夹内，双击 XWarp.exe 运行。</p>
+    </div>
+    <div class="step-box">
+      <div class="step-num">02</div>
+      <h4>粘贴专属激活 KEY</h4>
+      <p>在弹出的界面中粘贴您的专属 XWARP:// 激活码，点击立即激活，完成节点配置。</p>
+    </div>
+    <div class="step-box">
+      <div class="step-num">03</div>
+      <h4>一键开启畅连</h4>
+      <p>点击中央的超大开启按钮，打开浏览器即可秒速打开任何国外 AI 官方网站！</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-banner">
+  <h2>立即下载 XWarp AI 专线客户端</h2>
+  <p>纯净、极速、无广告。开启专属于您的全球 AI 生产力通道。</p>
+  <a class="btn-download" href="https://github.com/howellxuKing/xwarp-quick-setup/releases/download/v1.0.0/XWarp-v1.0.0-windows-x64.zip">
+    <span>🚀 下载 Windows 绿色版 (v1.0.0)</span>
+  </a>
+</div>
+
+<!-- FOOTER -->
 <footer>
-  <span>© 2026 <a href="https://github.com/howellxuKing">howellxuKing</a> · XWarp · MIT License</span>
-  <span>
-    <a href="https://github.com/howellxuKing/xwarp">后端</a> ·
-    <a href="https://github.com/howellxuKing/xwarp-ui">前端</a> ·
-    <a href="https://github.com/howellxuKing/xwarp-install">安装脚本</a>
-  </span>
+  <div>
+    © 2026 <strong>XWarp</strong> · 全球 AI 极速专线客户端
+  </div>
+  <div>
+    <a href="#features">功能特性</a> ·
+    <a href="#supported-ai">支持服务</a> ·
+    <a href="https://github.com/howellxuKing" target="_blank">GitHub</a>
+  </div>
 </footer>
+
 </body>
 </html>
